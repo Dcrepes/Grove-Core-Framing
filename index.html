@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>What Holds Your Home Together</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: short intro + load-path section drawing as the key, then one row per part (drawing left, plain-English explanation right), ordered from foundation to roof. */
+:root{
+  --bg:#f3f5f6; --surface:#ffffff; --ink:#18242c; --muted:#56656f; --line:#d5dce0;
+  --accent:#0f6b72; --accent-soft:#dcecec;
+  --steel-hi:#e9eef1; --steel:#b7c2c9; --steel-lo:#7d8a93; --steel-edge:#4c5961;
+  --concrete:#cfd2cf; --concrete-dot:#a6aaa6; --wood:#e6c79a; --wood-edge:#a9844f;
+  --display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#11181d; --surface:#18222a; --ink:#e7eef1; --muted:#9fb0ba; --line:#2c3a43;
+  --accent:#5fc3c9; --accent-soft:#1d3539;
+  --steel-hi:#dfe6ea; --steel:#a7b3ba; --steel-lo:#73818a; --steel-edge:#c9d3d8;
+  --concrete:#5a605e; --concrete-dot:#7b817e; --wood:#b8955f; --wood-edge:#e0c08c; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#11181d; --surface:#18222a; --ink:#e7eef1; --muted:#9fb0ba; --line:#2c3a43;
+  --accent:#5fc3c9; --accent-soft:#1d3539;
+  --steel-hi:#dfe6ea; --steel:#a7b3ba; --steel-lo:#73818a; --steel-edge:#c9d3d8;
+  --concrete:#5a605e; --concrete-dot:#7b817e; --wood:#b8955f; --wood-edge:#e0c08c; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.55;margin:0}
+.wrap{max-width:1040px;margin:0 auto;padding-inline:20px;padding-block:40px 56px;display:grid;gap:40px}
+h1,h2,h3{font-family:var(--display);font-weight:700;text-wrap:balance;margin:0;line-height:1.05}
+h1{font-size:clamp(2.4rem,6vw,3.6rem);letter-spacing:.005em}
+h2{font-size:1.9rem}
+h3{font-size:1.75rem}
+.eyebrow{font-family:var(--mono);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.lede{max-width:62ch;color:var(--muted);font-size:1.12rem;margin:0}
+header{display:grid;gap:14px}
+
+/* load path */
+.path{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:32px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:28px}
+.path svg{width:100%;height:auto;display:block}
+.path p{margin:0;max-width:52ch}
+.path .copy{display:grid;gap:14px}
+.legend{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.legend li{display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:center;font-size:.98rem}
+.pin{width:26px;height:26px;border-radius:50%;background:var(--accent);color:var(--surface);font-family:var(--mono);font-size:.82rem;font-weight:500;display:grid;place-items:center}
+
+/* parts */
+.parts{display:grid;gap:0;border-top:2px solid var(--ink)}
+.part{display:grid;grid-template-columns:300px minmax(0,1fr);gap:36px;padding-block:32px;border-bottom:1px solid var(--line);align-items:start}
+.fig{background:var(--surface);border:1px solid var(--line);border-radius:6px;aspect-ratio:4/3;display:grid;place-items:center;padding:14px;max-width:100%}
+.fig svg{width:100%;height:100%}
+.info{display:grid;gap:12px;min-width:0}
+.titlerow{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.code{font-family:var(--mono);font-size:.82rem;color:var(--muted);background:var(--accent-soft);padding:3px 8px;border-radius:3px}
+.info p{margin:0;max-width:62ch}
+.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 28px;margin:4px 0 0;padding:0}
+.facts div{display:grid;gap:2px}
+.facts dt{font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.facts dd{margin:0;font-size:.98rem}
+footer{color:var(--muted);font-size:.88rem;max-width:80ch;display:grid;gap:6px}
+footer p{margin:0}
+
+/* drawing tokens */
+.st{fill:var(--steel)} .st-hi{fill:var(--steel-hi)} .st-lo{fill:var(--steel-lo)}
+.edge{stroke:var(--steel-edge);stroke-width:1.4;stroke-linejoin:round}
+.hole{fill:var(--surface);stroke:var(--steel-edge);stroke-width:1}
+.thr{stroke:var(--steel-edge);stroke-width:1.3;fill:none}
+.dim{stroke:var(--muted);stroke-width:1;fill:none}
+.dimtx{fill:var(--muted);font-family:var(--mono);font-size:11px}
+.conc{fill:var(--concrete)} .cdot{fill:var(--concrete-dot)}
+.wood{fill:var(--wood);stroke:var(--wood-edge);stroke-width:1.2}
+.lbl{fill:var(--ink);font-family:var(--body);font-size:12px}
+.pinc{fill:var(--accent)} .pint{fill:var(--surface);font-family:var(--mono);font-size:12px;font-weight:500}
+.lead{stroke:var(--accent);stroke-width:1.4;fill:none}
+
+@media (max-width:760px){
+  .path{grid-template-columns:1fr;padding:18px}
+  .part{grid-template-columns:1fr;gap:18px}
+  .fig{max-width:420px}
+  .facts{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">Anchors &amp; Strapping · Lennar</span>
+    <h1>What holds your home together</h1>
+    <p class="lede">Behind the drywall, every Lennar home is tied together with steel connectors. They lock the roof to the walls and the walls to the concrete slab, so the house resists Florida wind as one piece. Here are the six parts we rely on most and what each one does.</p>
+  </header>
+
+  <section class="path" aria-labelledby="lp">
+    <svg viewBox="0 0 460 340" role="img" aria-label="Cross-section of a wall showing where each connector is installed, from the slab up to the roof truss">
+      <!-- slab -->
+      <rect x="20" y="276" width="420" height="50" class="conc"/>
+      <g class="cdot"><circle cx="50" cy="296" r="2"/><circle cx="96" cy="312" r="1.6"/><circle cx="150" cy="290" r="2.2"/><circle cx="214" cy="314" r="1.8"/><circle cx="268" cy="294" r="2"/><circle cx="330" cy="310" r="1.6"/><circle cx="388" cy="292" r="2.2"/><circle cx="420" cy="316" r="1.6"/></g>
+      <text x="30" y="320" class="lbl">Concrete slab</text>
+      <!-- bottom plate -->
+      <rect x="60" y="262" width="330" height="14" class="wood"/>
+      <!-- studs -->
+      <rect x="64" y="102" width="16" height="160" class="wood"/>
+      <rect x="80" y="102" width="16" height="160" class="wood"/>
+      <rect x="170" y="102" width="16" height="160" class="wood"/>
+      <rect x="260" y="102" width="16" height="160" class="wood"/>
+      <rect x="370" y="102" width="16" height="160" class="wood"/>
+      <!-- top plates -->
+      <rect x="60" y="88" width="330" height="14" class="wood"/>
+      <rect x="60" y="74" width="330" height="14" class="wood"/>
+      <!-- truss -->
+      <path d="M40 74 L230 14 L420 74 Z" class="wood" fill-opacity=".35"/>
+      <rect x="40" y="60" width="380" height="14" class="wood"/>
+      <text x="200" y="50" class="lbl">Roof truss</text>
+      <text x="196" y="190" class="lbl">Wall</text>
+      <!-- 1 Titen HD in bottom plate -->
+      <rect x="224" y="256" width="10" height="6" class="st-lo edge"/>
+      <rect x="227" y="262" width="4" height="40" class="st edge"/>
+      <!-- 2 wedge anchor under HTT -->
+      <rect x="104" y="240" width="4" height="66" class="st edge"/>
+      <rect x="99" y="236" width="14" height="5" class="st-lo edge"/>
+      <!-- 3 HTT4 -->
+      <rect x="96" y="178" width="10" height="72" class="st edge"/>
+      <rect x="96" y="244" width="20" height="8" class="st-lo edge"/>
+      <!-- 4 SDWC 4.5 stud to bottom plate -->
+      <line x1="300" y1="246" x2="282" y2="280" class="edge" stroke-width="3"/>
+      <!-- 5 MSTA24 strap across plates/stud -->
+      <rect x="338" y="80" width="8" height="70" class="st edge"/>
+      <!-- 6 SDWC 6 truss to plate -->
+      <line x1="300" y1="108" x2="318" y2="58" class="edge" stroke-width="3"/>
+
+      <!-- pins + leaders -->
+      <path d="M229 290 L229 290" class="lead"/>
+      <g><line x1="234" y1="296" x2="250" y2="306" class="lead"/><circle cx="260" cy="312" r="11" class="pinc"/><text x="260" y="316" text-anchor="middle" class="pint">1</text></g>
+      <g><line x1="104" y1="296" x2="132" y2="306" class="lead"/><circle cx="142" cy="312" r="11" class="pinc"/><text x="142" y="316" text-anchor="middle" class="pint">2</text></g>
+      <g><line x1="106" y1="200" x2="130" y2="200" class="lead"/><circle cx="141" cy="200" r="11" class="pinc"/><text x="141" y="204" text-anchor="middle" class="pint">3</text></g>
+      <g><line x1="300" y1="246" x2="318" y2="232" class="lead"/><circle cx="328" cy="226" r="11" class="pinc"/><text x="328" y="230" text-anchor="middle" class="pint">4</text></g>
+      <g><line x1="346" y1="130" x2="356" y2="140" class="lead"/><circle cx="364" cy="148" r="11" class="pinc"/><text x="364" y="152" text-anchor="middle" class="pint">5</text></g>
+      <g><line x1="310" y1="80" x2="330" y2="38" class="lead"/><circle cx="336" cy="28" r="11" class="pinc"/><text x="336" y="32" text-anchor="middle" class="pint">6</text></g>
+    </svg>
+    <div class="copy">
+      <span class="eyebrow">The load path</span>
+      <h2 id="lp">One connected chain, roof to slab</h2>
+      <p>When wind pushes on a house, it tries to lift the roof and slide the walls. Each connector passes that force down to the next piece until it reaches the concrete, which holds it.</p>
+      <ul class="legend">
+        <li><span class="pin">1</span>Titen HD anchor: wall to slab</li>
+        <li><span class="pin">2</span>Wedge anchor: heavy hardware to slab</li>
+        <li><span class="pin">3</span>HTT4 hold-down: wall corners to slab</li>
+        <li><span class="pin">4</span>4½" SDWC screw: studs to plates</li>
+        <li><span class="pin">5</span>MSTA24 strap: framing pieces to each other</li>
+        <li><span class="pin">6</span>6" SDWC screw: roof to walls</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="parts" aria-label="Connector details">
+
+    <!-- 1 Titen HD -->
+    <article class="part">
+      <div class="fig">
+        <svg viewBox="0 0 280 210" role="img" aria-label="Titen HD screw anchor, half inch by six inches">
+          <rect x="20" y="88" width="22" height="34" rx="2" class="st-lo edge"/>
+          <rect x="42" y="84" width="6" height="42" class="st-hi edge"/>
+          <rect x="48" y="96" width="200" height="18" class="st edge"/>
+          <path d="M248 96 L262 105 L248 114 Z" class="st edge"/>
+          <g class="thr">
+            <path d="M60 92 l6 26 M76 92 l6 26 M92 92 l6 26 M108 92 l6 26 M124 92 l6 26 M140 92 l6 26 M156 92 l6 26 M172 92 l6 26 M188 92 l6 26 M204 92 l6 26 M220 92 l6 26 M236 92 l6 26"/>
+          </g>
+          <path d="M42 150 H262" class="dim"/><path d="M42 145 v10 M262 145 v10" class="dim"/>
+          <text x="152" y="170" text-anchor="middle" class="dimtx">6 in long · ½ in diameter</text>
+        </svg>
+      </div>
+      <div class="info">
+        <div class="titlerow"><span class="pin">1</span><h3>Titen HD screw anchor</h3><span class="code">THD50600H · ½" × 6"</span></div>
+        <p>A heavy-duty screw made for concrete. The installer drills a hole in the slab and drives this anchor straight in; its hardened threads cut into the concrete and grip it tight. This is the anchor we use most, often 70 to 100 in a single home.</p>
+        <dl class="facts">
+          <div><dt>Where it goes</dt><dd>Through the bottom board of each wall, down into the slab</dd></div>
+          <div><dt>Why it matters</dt><dd>Keeps walls from lifting or sliding off the foundation in high wind</dd></div>
+        </dl>
+      </div>
+    </article>
+
+    <!-- 2 Wedge anchor -->
+    <article class="part">
+      <div class="fig">
+        <svg viewBox="0 0 280 210" role="img" aria-label="Wedge anchor, five-eighths inch by twelve inches, with nut and washer">
+          <rect x="22" y="86" width="20" height="38" rx="2" class="st-lo edge"/>
+          <rect x="42" y="80" width="6" height="50" class="st-hi edge"/>
+          <rect x="48" y="96" width="196" height="18" class="st edge"/>
+          <g class="thr"><path d="M54 94 l4 22 M64 94 l4 22 M74 94 l4 22 M84 94 l4 22 M94 94 l4 22 M104 94 l4 22 M114 94 l4 22"/></g>
+          <rect x="216" y="92" width="22" height="26" rx="2" class="st-hi edge"/>
+          <path d="M238 96 L258 101 L258 109 L238 114 Z" class="st edge"/>
+          <path d="M42 150 H258" class="dim"/><path d="M42 145 v10 M258 145 v10" class="dim"/>
+          <text x="150" y="170" text-anchor="middle" class="dimtx">12 in long · ⅝ in diameter</text>
+          <text x="227" y="80" text-anchor="middle" class="dimtx">clip</text>
+        </svg>
+      </div>
+      <div class="info">
+        <div class="titlerow"><span class="pin">2</span><h3>Wedge anchor</h3><span class="code">WA62120 · ⅝" × 12"</span></div>
+        <p>A thick steel bolt for heavier connections. It goes into a drilled hole in the concrete; when the nut on top is tightened, a steel clip at the bottom wedges outward against the hole and locks the anchor in place.</p>
+        <dl class="facts">
+          <div><dt>Where it goes</dt><dd>Into the slab, holding down hold-downs, posts and other heavy hardware</dd></div>
+          <div><dt>Why it matters</dt><dd>Provides a strong attachment point wherever a connector has to resist big upward forces</dd></div>
+        </dl>
+      </div>
+    </article>
+
+    <!-- 3 HTT4 -->
+    <article class="part">
+      <div class="fig">
+        <svg viewBox="0 0 280 210" role="img" aria-label="HTT4 tension tie hold-down, about twelve inches tall">
+          <path d="M112 16 H150 V170 H112 Z" class="st edge"/>
+          <path d="M150 16 L162 22 V176 L150 170 Z" class="st-lo edge"/>
+          <path d="M96 170 H170 V192 H96 Z" class="st-hi edge"/>
+          <ellipse cx="133" cy="181" rx="10" ry="5" class="hole"/>
+          <g>
+            <circle cx="122" cy="32" r="2.6" class="hole"/><circle cx="140" cy="32" r="2.6" class="hole"/>
+            <circle cx="122" cy="50" r="2.6" class="hole"/><circle cx="140" cy="50" r="2.6" class="hole"/>
+            <circle cx="122" cy="68" r="2.6" class="hole"/><circle cx="140" cy="68" r="2.6" class="hole"/>
+            <circle cx="122" cy="86" r="2.6" class="hole"/><circle cx="140" cy="86" r="2.6" class="hole"/>
+            <circle cx="122" cy="104" r="2.6" class="hole"/><circle cx="140" cy="104" r="2.6" class="hole"/>
+            <circle cx="122" cy="122" r="2.6" class="hole"/><circle cx="140" cy="122" r="2.6" class="hole"/>
+            <circle cx="131" cy="140" r="2.6" class="hole"/>
+          </g>
+          <path d="M186 16 V192" class="dim"/><path d="M181 16 h10 M181 192 h10" class="dim"/>
+          <text x="196" y="108" class="dimtx">12⅜ in</text>
+          <text x="60" y="60" class="dimtx">nails</text><path d="M86 56 L116 50" class="dim"/>
+          <text x="40" y="184" class="dimtx">anchor</text><path d="M84 181 H120" class="dim"/>
+        </svg>
+      </div>
+      <div class="info">
+        <div class="titlerow"><span class="pin">3</span><h3>Tension tie (hold-down)</h3><span class="code">HTT4 · 12⅜"</span></div>
+        <p>A tall steel bracket that is nailed to the end post of a wall and then bolted to an anchor in the slab. It keeps the corners and ends of walls planted on the foundation when wind tries to tip the wall over.</p>
+        <dl class="facts">
+          <div><dt>Where it goes</dt><dd>At the ends of the walls that brace the house, connected to an anchor in the concrete</dd></div>
+          <div><dt>Why it matters</dt><dd>Stops walls from rocking up at one end under hurricane loads</dd></div>
+        </dl>
+      </div>
+    </article>
+
+    <!-- 4 SDWC 4.5 -->
+    <article class="part">
+      <div class="fig">
+        <svg viewBox="0 0 280 210" role="img" aria-label="SDWC wood screw, four and a half inches long">
+          <path d="M46 92 Q34 105 46 118 L56 116 L56 94 Z" class="st-lo edge"/>
+          <rect x="56" y="100" width="140" height="10" class="st edge"/>
+          <path d="M196 100 L214 105 L196 110 Z" class="st edge"/>
+          <g class="thr"><path d="M70 98 l4 14 M80 98 l4 14 M90 98 l4 14 M100 98 l4 14 M110 98 l4 14 M120 98 l4 14 M130 98 l4 14 M140 98 l4 14 M150 98 l4 14 M160 98 l4 14 M170 98 l4 14 M180 98 l4 14 M190 98 l4 14"/></g>
+          <path d="M44 150 H214" class="dim"/><path d="M44 145 v10 M214 145 v10" class="dim"/>
+          <text x="129" y="170" text-anchor="middle" class="dimtx">4½ in long · sold 50 per pack</text>
+        </svg>
+      </div>
+      <div class="info">
+        <div class="titlerow"><span class="pin">4</span><h3>Structural wood screw, 4½"</h3><span class="code">SDWC15450 · 50 pack</span></div>
+        <p>A long, slim structural screw driven at an angle through the wall framing. It fastens each wall stud to the boards that run along the top and bottom of the wall, and it is rated to hold against uplift.</p>
+        <dl class="facts">
+          <div><dt>Where it goes</dt><dd>Where the vertical studs meet the top and bottom plates of the wall</dd></div>
+          <div><dt>Why it matters</dt><dd>Keeps the wall frame from pulling apart, so wind forces keep traveling down to the slab</dd></div>
+        </dl>
+      </div>
+    </article>
+
+    <!-- 5 MSTA24 -->
+    <article class="part">
+      <div class="fig">
+        <svg viewBox="0 0 280 210" role="img" aria-label="MSTA24 medium strap tie, twenty-four inches long with two rows of nail holes">
+          <rect x="18" y="90" width="244" height="30" rx="2" class="st edge"/>
+          <g>
+            <circle cx="32" cy="99" r="2.6" class="hole"/><circle cx="32" cy="111" r="2.6" class="hole"/>
+            <circle cx="48" cy="99" r="2.6" class="hole"/><circle cx="48" cy="111" r="2.6" class="hole"/>
+            <circle cx="64" cy="99" r="2.6" class="hole"/><circle cx="64" cy="111" r="2.6" class="hole"/>
+            <circle cx="80" cy="99" r="2.6" class="hole"/><circle cx="80" cy="111" r="2.6" class="hole"/>
+            <circle cx="96" cy="99" r="2.6" class="hole"/><circle cx="96" cy="111" r="2.6" class="hole"/>
+            <circle cx="112" cy="105" r="2.6" class="hole"/>
+            <circle cx="168" cy="105" r="2.6" class="hole"/>
+            <circle cx="184" cy="99" r="2.6" class="hole"/><circle cx="184" cy="111" r="2.6" class="hole"/>
+            <circle cx="200" cy="99" r="2.6" class="hole"/><circle cx="200" cy="111" r="2.6" class="hole"/>
+            <circle cx="216" cy="99" r="2.6" class="hole"/><circle cx="216" cy="111" r="2.6" class="hole"/>
+            <circle cx="232" cy="99" r="2.6" class="hole"/><circle cx="232" cy="111" r="2.6" class="hole"/>
+            <circle cx="248" cy="99" r="2.6" class="hole"/><circle cx="248" cy="111" r="2.6" class="hole"/>
+          </g>
+          <path d="M140 80 V130" class="dim" stroke-dasharray="3 3"/>
+          <text x="140" y="74" text-anchor="middle" class="dimtx">joint</text>
+          <path d="M18 150 H262" class="dim"/><path d="M18 145 v10 M262 145 v10" class="dim"/>
+          <text x="140" y="170" text-anchor="middle" class="dimtx">24 in long · galvanized steel</text>
+        </svg>
+      </div>
+      <div class="info">
+        <div class="titlerow"><span class="pin">5</span><h3>Strap tie</h3><span class="code">MSTA24 · 24"</span></div>
+        <p>A flat, galvanized steel strap with nail holes along its length. It is laid across a joint where two pieces of framing meet and nailed to both, so the two pieces act as one.</p>
+        <dl class="facts">
+          <div><dt>Where it goes</dt><dd>Across joints in the framing, such as wall plates, beams and headers over openings</dd></div>
+          <div><dt>Why it matters</dt><dd>Bridges seams in the framing so the load path never has a weak link</dd></div>
+        </dl>
+      </div>
+    </article>
+
+    <!-- 6 SDWC 6 -->
+    <article class="part">
+      <div class="fig">
+        <svg viewBox="0 0 280 210" role="img" aria-label="SDWC truss screw, six inches long">
+          <path d="M24 92 Q12 105 24 118 L34 116 L34 94 Z" class="st-lo edge"/>
+          <rect x="34" y="100" width="200" height="10" class="st edge"/>
+          <path d="M234 100 L254 105 L234 110 Z" class="st edge"/>
+          <g class="thr"><path d="M48 98 l4 14 M58 98 l4 14 M68 98 l4 14 M78 98 l4 14 M88 98 l4 14 M98 98 l4 14 M108 98 l4 14 M118 98 l4 14 M128 98 l4 14 M138 98 l4 14 M148 98 l4 14 M158 98 l4 14 M168 98 l4 14 M178 98 l4 14 M188 98 l4 14 M198 98 l4 14 M208 98 l4 14 M218 98 l4 14 M228 98 l4 14"/></g>
+          <path d="M22 150 H254" class="dim"/><path d="M22 145 v10 M254 145 v10" class="dim"/>
+          <text x="138" y="170" text-anchor="middle" class="dimtx">6 in long · sold 50 per pack</text>
+        </svg>
+      </div>
+      <div class="info">
+        <div class="titlerow"><span class="pin">6</span><h3>Truss screw, 6"</h3><span class="code">SDWC15600 · 50 pack</span></div>
+        <p>The longer version of the screw above. It is driven up through the top of the wall into each roof truss, tying the roof to the walls. Its flat cap head sits flush in the wood, so it stays hidden behind the ceiling.</p>
+        <dl class="facts">
+          <div><dt>Where it goes</dt><dd>Through the double top plate of the wall into every roof truss</dd></div>
+          <div><dt>Why it matters</dt><dd>Holds the roof down when hurricane winds try to lift it off the house</dd></div>
+        </dl>
+      </div>
+    </article>
+  </section>
+
+  <footer>
+    <p>Connectors are manufactured by Simpson Strong-Tie and supplied through our framing lumber vendor. Drawings are simplified illustrations, not to scale with each other.</p>
+    <p>The exact type, count and placement of connectors in each home is set by the engineered plans and local building code.</p>
+  </footer>
+</div>
+</body>
+</html>
